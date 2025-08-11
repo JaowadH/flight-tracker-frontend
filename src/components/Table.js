@@ -1,30 +1,40 @@
 import React from 'react';
+import './Table.css';
 
-const Table = ({ cities }) => {
-  return (
-    <table className="table">
-      <thead>
-        <tr>
-          <th>Id</th>
-          <th>Name</th>
-          <th>Town Hall</th>
-        </tr>
-      </thead>
-      <tbody>
-        { (cities.length > 0) ? cities.map( (city, index) => {
-        console.log(city)
-                   return (
-                    <tr key={ index }>
-                      <td>{ city.id }</td>
-                      <td>{ city.name }</td>
-                      <td>"..."</td>
-                    </tr>
-                  )
-                 }) : <tr><td colSpan="5">Loading...</td></tr> }
-      </tbody>
-    </table>
-  );
-}
+const Table = ({cities}) => {
+    const rows = Array.isArray(cities) ? cities : [];
 
-export default Table
+    return (
+        <div className="table-shell">
+            <div className="table-card">
+                <div className="table-card__title">Airports</div>
+                <div className="table-wrap">
+                    <table className="table table-darkish">
+                        <thead>
+                        <tr>
+                            <th style={{width: 120}}>Id</th>
+                            <th>Name</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {rows.length > 0 ? (
+                            rows.map((city, i) => (
+                                <tr key={city.id ?? i}>
+                                    <td>{city.id}</td>
+                                    <td>{city.name}</td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr className="table-empty">
+                                <td colSpan="2">No data</td>
+                            </tr>
+                        )}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    );
+};
 
+export default Table;
