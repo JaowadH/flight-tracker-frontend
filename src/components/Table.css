@@ -2,11 +2,11 @@
     display: flex;
     justify-content: center;
     padding: 24px 16px;
+    margin-top: 30px;
 }
 
 .table-card {
-    width: 100%;
-    max-width: 980px;
+    width: 80%;
 
     /* glass background: subtle transparency + blur */
     background: linear-gradient(
@@ -28,11 +28,14 @@
 .table-card__title {
     padding: 14px 18px;
     font-weight: 600;
+    font-size: 20pt;
     letter-spacing: 0.2px;
     border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.08));
     background:
             linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02)),
             var(--bg-elev-2, #222222);
+    text-shadow: 0 0 3px #5b8cff, 0 0 12px rgba(91, 140, 255, 0.2);
+
 }
 
 /* Scroll container */
@@ -57,7 +60,7 @@
     z-index: 1;
 
     background:
-            linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02)),
+            linear-gradient(180deg, rgba(34, 34, 34, 0.08), rgba(0, 0, 0, 0.02)),
             var(--bg-elev-2, #222222);
     color: var(--text, #e8e8e8);
     border-bottom: 1px solid var(--border, rgba(255,255,255,0.08));
