@@ -4,7 +4,7 @@ const BASE = RAW_BASE.replace(/\/+$/, '');
 async function getJson(path) {
     const url = BASE ? `${BASE}${path}` : path;
     const res = await fetch(url, {
-        headers: { Accept: 'application/json' },
+        headers: {Accept: 'application/json'},
     });
     if (!res.ok) {
         const text = await res.text().catch(() => '');

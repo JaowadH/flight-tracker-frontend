@@ -1,29 +1,49 @@
+import React from 'react';
 import './Table.css';
 
-function Table({title, cities}) {
+const Table = ({title, columns = [], rows = []}) => {
+    const safe = v => (v === null || v === undefined || v === '' ? '—' : v);
+
     return (
-        <div className="table-shell">
-            <div className="table-card">
-                <div className="table-card__title">{title}</div>
-                <div className="table-wrap">
-                    <table className="table-darkish">
+        <div className="ft-shell">
+            <div className="ft-card">
+                <div className="ft-title">{title}</div>
+
+                <div className="ft-sep" />
+
+                <div className="ft-wrap">
+                    <table className="ft-table">
+                        <colgroup>
+                            {columns.map(col => (
+                                <col
+                                    key={col.key}
+                                    style={col.width ? {width: `${col.width}px`} : {}}
+                                />
+                            ))}
+                        </colgroup>
+
                         <thead>
                         <tr>
-                            <th>Id</th>
-                            <th>Name</th>
+                            {columns.map(col => (
+                                <th key={col.key}>{col.label}</th>
+                            ))}
                         </tr>
                         </thead>
+
                         <tbody>
-                        {cities.length > 0 ? (
-                            cities.map((c) => (
-                                <tr key={c.id}>
-                                    <td>{c.id}</td>
-                                    <td>{c.name}</td>
+                        {rows.length ? (
+                            rows.map((r, i) => (
+                                <tr key={r.id ?? i}>
+                                    {columns.map(col => (
+                                        <td key={col.key}>
+                                            {safe(r[col.key])}
+                                        </td>
+                                    ))}
                                 </tr>
                             ))
                         ) : (
-                            <tr className="table-empty">
-                                <td colSpan={2}>No data</td>
+                            <tr className="ft-empty">
+                                <td colSpan={columns.length}>No data</td>
                             </tr>
                         )}
                         </tbody>
@@ -32,6 +52,6 @@ function Table({title, cities}) {
             </div>
         </div>
     );
-}
+};
 
 export default Table;

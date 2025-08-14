@@ -21,10 +21,10 @@
 }
 
 @media (prefers-color-scheme: light) {
-  :root { color-scheme: dark; }
+  :root {color-scheme: dark;}
 }
 
-* { box-sizing: border-box; }
+* {box-sizing: border-box;}
 
 html, body, #root {
   height: 100%;
@@ -63,6 +63,10 @@ a:hover {
   border-bottom: 1px solid var(--border);
   box-shadow: var(--shadow);
   justify-content: center;
+  position: sticky;  /* keep it at the top when scrolling */
+  top: 0;
+  z-index: 10;
+  height: 64px;
 }
 .navbar .navbar-brand,
 .navbar .nav-link {
