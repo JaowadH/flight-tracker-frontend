@@ -190,29 +190,6 @@ hr{border-color:var(--border);}
 }
 *::-webkit-scrollbar-thumb:hover{background:#374151;}
 
-.table-shell{
-  width:100%;
-  height:calc(100vh - var(--nav-h) - var(--footer-h));
-  padding:12px 16px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
-}
-.table-card{
-  width:100%;
-  max-width:1100px;
-  display:flex;
-  flex-direction:column;
-  min-height:0;
-}
-.table-wrap{
-  flex:1 1 auto;
-  min-height:0;
-  overflow:auto;
-  max-height:none;
-}
-
 /* footer */
 .site-footer{
   position:fixed;

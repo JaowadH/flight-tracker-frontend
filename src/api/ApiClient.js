@@ -7,7 +7,6 @@ const RAW_BASE = process.env.REACT_APP_API_BASE_URL || "";
 function normalizeBase(b) {
   if (!b || typeof b !== "string") return "/api";
   let s = b.trim().replace(/\/+$/, "");
-  // allow bare "api" -> "/api"
   if (!/^https?:\/\//i.test(s) && s[0] !== "/") s = "/" + s;
   return s || "/api";
 }
@@ -35,7 +34,6 @@ async function request(path, { method = "GET", body, headers = {}, timeoutMs } =
       headers: reqHeaders,
       body: isJsonBody ? JSON.stringify(body) : body,
       signal: controller.signal,
-      // credentials: "include", // uncomment if you use cookie-based auth
     });
   } finally {
     clearTimeout(t);
@@ -66,14 +64,31 @@ function mapAircraft(a) {
     id: a.id,
     type: a.type ?? a.aircraftType ?? a.name ?? "",
     airlineName: a.airlineName ?? a.airline ?? null,
-    // normalize passengers property name
     numberOfPassengers:
-      a.numberOfPassengers ??
-      a.numOfPassengers ??
-      a.passengerCount ??
-      null,
-    // keep original for compatibility if someone reads raw
+        a.numberOfPassengers ??
+        a.numOfPassengers ??
+        a.passengerCount ??
+        null,
     ...a,
+  };
+}
+
+function mapFlight(f) {
+  if (!f || typeof f !== "object") return f;
+  return {
+    id: f.id,
+    airline: f.airline ?? null,
+    flightNumber: f.flightNumber ?? null,
+    departureAirport: f.departureAirport ?? null,
+    arrivalAirport: f.arrivalAirport ?? null,
+    departureAirportName: f.departureAirport?.name ?? null,
+    arrivalAirportName: f.arrivalAirport?.name ?? null,
+    scheduledDeparture: f.scheduledDeparture ?? null,
+    scheduledArrival: f.scheduledArrival ?? null,
+    status: f.status ?? null,
+    distanceKm: f.distanceKm ?? null,
+    durationMinutes: f.durationMinutes ?? null,
+    ...f,
   };
 }
 
@@ -85,7 +100,6 @@ function mapArray(data, mapper) {
 /* ------------ Public API ------------ */
 
 const ApiClient = {
-  /* Canonical helpers */
   async getAllAirports() {
     return request("/airports");
   },
@@ -99,7 +113,11 @@ const ApiClient = {
     return request("/passengers");
   },
 
-  /* Aliases so existing pages keep working */
+  async getAllFlights() {
+    const data = await request("/flights");
+    return mapArray(data, mapFlight);
+  },
+
   getAirports() {
     return this.getAllAirports();
   },
@@ -112,11 +130,9 @@ const ApiClient = {
   getPassengers() {
     return this.getAllPassengers();
   },
-
-  /* If you add writes later, keep them normalized too */
-  // createPassenger: (payload) => request("/passengers", { method: "POST", body: payload }),
-  // updatePassenger: (id, payload) => request(`/passengers/${id}`, { method: "PUT", body: payload }),
-  // deletePassenger: (id) => request(`/passengers/${id}`, { method: "DELETE" }),
+  getFlights() {
+    return this.getAllFlights();
+  },
 };
 
 export default ApiClient;

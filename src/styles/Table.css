@@ -11,13 +11,13 @@
 /* Shell */
 .table-shell{
     width:100%;
-    max-width:1100px;
-    height:100%;                 /* fill the page window */
+    max-width:1600px;
+    height:100%;
     display:flex;
     justify-content:center;
 }
 
-/* Card fills the window and uses flex to give the body the rest */
+/* Card fills the window */
 .table-card{
     width:100%;
     height:100%;
