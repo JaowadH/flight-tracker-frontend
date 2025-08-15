@@ -1,100 +1,47 @@
-import React, {Component} from 'react';
+import {BrowserRouter as Router, Routes, Route, NavLink} from 'react-router-dom';
+import LandingPage from './pages/LandingPage';
+import AirportsPage from './pages/AirportsPage';
+import AircraftPage from './pages/AircraftPage';
+import PassengersPage from './pages/PassengersPage';
+import AdminPage from './pages/AdminPage';
+import airplaneIcon from './assets/airplane-icon.png';
+import SiteFooter from './components/SiteFooter';
 import './App.css';
-import Table from './components/Table';
-import './components/Table.css'
-import airplaneIcon from './airplane-icon.png';
-import ApiClient from './api/ApiClient';
+import './styles/Table.css';
 
-class App extends Component {
-  state = {
-    activeTab: 'airports',
-    rows: [],
-    columns: [],
-    loading: true,
-    error: null
-  };
+export default function App(){
+    return(
+        <Router>
+            <div className="app-shell">
+                <nav className="navbar">
+                    <div className="nav-left">
+                        <img src={airplaneIcon} alt="Flight Tracker" className="brand-logo"/>
+                        <span className="brand">CCJ Flight Tracker</span>
+                    </div>
 
-  componentDidMount() {
-    this.loadCurrentTab().catch(console.error);
-  }
+                    <ul className="nav-center">
+                        <li><NavLink to="/" end className="nav-link">Home</NavLink></li>
+                        <li><NavLink to="/airports" className="nav-link">Airports</NavLink></li>
+                        <li><NavLink to="/aircraft" className="nav-link">Aircraft</NavLink></li>
+                        <li><NavLink to="/passengers" className="nav-link">Passengers</NavLink></li>
+                    </ul>
 
-  getColumnsForTab = tab => {
-    if(tab === 'aircraft'){
-      return [
-        {key:'id', label:'Id'},
-        {key:'type', label:'Type'},
-        {key:'airlineName', label:'Airline'},
-        {key:'numOfPassengers', label:'# Passengers', align:'right'}
-      ];
-    }
-    if(tab === 'passengers'){
-      return [
-        {key:'id', label:'Id'},
-        {key:'firstName', label:'First Name'},
-        {key:'lastName', label:'Last Name'},
-        {key:'phoneNumber', label:'Phone'}
-      ];
-    }
-    // airports
-    return [
-      {key:'id', label:'Id'},
-      {key:'name', label:'Name'},
-      {key:'portId', label:'Port'}
-    ];
-  };
+                    <div className="nav-right">
+                        <NavLink to="/admin" className="nav-link">Admin</NavLink>
+                    </div>
+                </nav>
 
-  loadCurrentTab = async () => {
-    const {activeTab} = this.state;
-    this.setState({loading:true, error:null});
-    try{
-      let data;
-      if(activeTab === 'airports') data = await ApiClient.getAllAirports();
-      else if(activeTab === 'aircraft') data = await ApiClient.getAllAircraft();
-      else data = await ApiClient.getAllPassengers();
 
-      const columns = this.getColumnsForTab(activeTab);
-      this.setState({rows:Array.isArray(data)?data:[], columns});
-    }catch(err){
-      this.setState({error:err.message || 'Failed to load'});
-    }finally{
-      this.setState({loading:false});
-    }
-  };
+                <Routes>
+                    <Route path="/" element={<LandingPage/>}/>
+                    <Route path="/airports" element={<AirportsPage/>}/>
+                    <Route path="/aircraft" element={<AircraftPage/>}/>
+                    <Route path="/passengers" element={<PassengersPage/>}/>
+                    <Route path="/admin" element={<AdminPage/>}/>
+                </Routes>
 
-  setTab = tab => {
-    if(tab === this.state.activeTab) return;
-    this.setState({activeTab:tab}, () => this.loadCurrentTab());
-  };
-
-  render(){
-    const {activeTab, rows, columns, loading, error} = this.state;
-
-    const tabTitles = {
-      airports:'Airports',
-      aircraft:'Aircraft',
-      passengers:'Passengers'
-    };
-
-    return (
-        <div className="App">
-          <nav className="navbar navbar-dark px-3" style={{background:'linear-gradient(180deg, var(--bg-elev-1), var(--bg-elev-2))'}}>
-            <a className="navbar-brand d-flex align-items-center gap-2" href="./" onClick={e=>e.preventDefault()}>
-              <img src={airplaneIcon} alt="Airplane Icon" width={28} height={28}/>
-              <span>CCJ Flight Tracker</span>
-            </a>
-            <div className="d-flex gap-2">
-              <button className={`btn ${activeTab==='airports'?'btn-primary':'btn-outline-primary'}`} onClick={()=>this.setTab('airports')}>Airports</button>
-              <button className={`btn ${activeTab==='aircraft'?'btn-primary':'btn-outline-primary'}`} onClick={()=>this.setTab('aircraft')}>Aircraft</button>
-              <button className={`btn ${activeTab==='passengers'?'btn-primary':'btn-outline-primary'}`} onClick={()=>this.setTab('passengers')}>Passengers</button>
+                <SiteFooter/>
             </div>
-          </nav>
-
-          {loading && <div className="p-3">Loading…</div>}
-          {error && <div className="alert alert-danger m-3">{error}</div>}
-          {!loading && !error && <Table title={tabTitles[activeTab]} columns={columns} rows={rows}/>}
-        </div>
+        </Router>
     );
-  }
 }
-
-export default App;

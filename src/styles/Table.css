@@ -1,0 +1,141 @@
+/* Page window for table screens: no page scroll */
+.page{
+    height:calc(100vh - var(--nav-h) - var(--footer-h));
+    padding:16px;
+    display:flex;
+    align-items:center;          /* vertical center between nav & footer */
+    justify-content:center;      /* horizontal center */
+    overflow:hidden;             /* prevent page scroll; scroll lives in table */
+}
+
+/* Shell */
+.table-shell{
+    width:100%;
+    max-width:1100px;
+    height:100%;                 /* fill the page window */
+    display:flex;
+    justify-content:center;
+}
+
+/* Card fills the window and uses flex to give the body the rest */
+.table-card{
+    width:100%;
+    height:100%;
+    border-radius:var(--radius,14px);
+    border:1px solid rgba(255,255,255,0.08);
+    box-shadow:var(--shadow,0 8px 24px rgba(0,0,0,0.35));
+    overflow:hidden;
+
+    background:
+            linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.03)),
+            var(--bg-elev-1,#2c2c2c);
+    backdrop-filter:blur(10px) saturate(120%);
+    -webkit-backdrop-filter:blur(10px) saturate(120%);
+
+    display:flex;
+    flex-direction:column;
+    min-height:0;
+}
+
+/* Title bar */
+.table-card__title{
+    padding:14px 18px;
+    font-weight:600;
+    text-align:center;
+    font-size:20pt;
+    letter-spacing:.2px;
+    border-bottom:1px solid var(--border,rgba(255,255,255,0.08));
+    background:
+            linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02)),
+            var(--bg-elev-2,#2e2e2e);
+    text-shadow:0 0 3px #fff,0 0 12px rgba(137,210,255,0.7);
+}
+
+/* Scroll area takes remaining height inside the card */
+.table-wrap{
+    flex:1 1 auto;
+    min-height:0;                /* allow flex child to shrink */
+    overflow:auto;               /* only this scrolls */
+    scrollbar-gutter:stable both-edges;
+    padding-bottom:4px;
+}
+
+/* Table */
+.table-darkish{
+    margin:0;
+    width:100%;
+    color:var(--text,#e4e6eb);
+    background:transparent;
+    border-collapse:separate;
+    border-spacing:0;
+    table-layout:fixed;
+}
+
+/* Center all cells by default */
+.table-darkish th,
+.table-darkish td{
+    text-align:center;
+}
+
+/* Header */
+.table-darkish thead th{
+    position:sticky;
+    top:0;
+    z-index:1;
+    background:
+            linear-gradient(180deg,rgba(34,34,34,0.08),rgba(0,0,0,0.02)),
+            var(--bg-elev-2,#2e2e2e);
+    color:var(--text,#e4e6eb);
+    border-bottom:1px solid var(--border,rgba(255,255,255,0.08));
+    font-weight:600;
+    backdrop-filter:blur(6px) saturate(120%);
+    -webkit-backdrop-filter:blur(6px) saturate(120%);
+}
+
+/* Cells */
+.table-darkish th,
+.table-darkish td{
+    padding:14px 16px;
+    border-bottom:1px solid var(--border,rgba(255,255,255,0.08));
+    vertical-align:middle;
+    transition:background 140ms ease,color 120ms ease;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+/* Row hover */
+.table-darkish tbody tr{
+    transition:background 140ms ease,transform 120ms ease,box-shadow 120ms ease;
+}
+.table-darkish tbody tr:hover{
+    background:linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02));
+    transform:translateY(-1px);
+    box-shadow:0 6px 16px rgba(0,0,0,0.25);
+}
+
+/* Zebra */
+.table-darkish tbody tr:nth-child(even){
+    background:rgba(255,255,255,0.02);
+}
+
+/* Empty state */
+.table-empty td{
+    text-align:center;
+    color:var(--text-dim,#a0a4a8);
+    padding:24px 16px;
+}
+
+/* Responsive tweaks */
+@media (max-width:520px){
+    .table-card{border-radius:var(--radius-sm,10px);}
+    .table-darkish th,.table-darkish td{padding:12px 12px;}
+}
+
+/* Reduced transparency */
+@media (prefers-reduced-transparency:reduce){
+    .table-card,.table-darkish thead th{
+        backdrop-filter:none;
+        -webkit-backdrop-filter:none;
+    }
+}
