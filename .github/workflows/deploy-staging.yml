@@ -1,0 +1,48 @@
+name: Deploy Staging (CRA → S3/CloudFront)
+
+on:
+  push:
+    branches: [ develop ]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Build (CRA)
+        env:
+          REACT_APP_API_BASE_URL: ${{ secrets.STAGING_REACT_APP_API_BASE_URL }}
+        run: |
+          npm run build
+          test -d build || (echo "CRA output 'build/' not found" && exit 1)
+
+      - name: Configure AWS (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ secrets.STAGING_AWS_REGION }}
+          role-to-assume: ${{ secrets.STAGING_AWS_ROLE_TO_ASSUME }}
+
+      - name: Sync to S3 (staging)
+        run: aws s3 sync build/ "s3://${{ secrets.STAGING_S3_BUCKET }}" --delete
+
+      - name: Invalidate CloudFront (staging)
+        run: aws cloudfront create-invalidation --distribution-id "${{ secrets.STAGING_CF_DISTRIBUTION_ID }}" --paths "/*"
+
+      - name: Smoke check (index.html present)
+        run: aws s3 ls "s3://${{ secrets.STAGING_S3_BUCKET }}/index.html"

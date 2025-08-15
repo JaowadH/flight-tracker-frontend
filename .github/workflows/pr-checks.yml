@@ -1,0 +1,27 @@
+name: PR Checks (CRA build)
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build (no deploy)
+        env:
+          # Use staging API for PR builds, or set another secret if you prefer
+          REACT_APP_API_BASE_URL: ${{ secrets.STAGING_REACT_APP_API_BASE_URL }}
+        run: npm run build
