@@ -1,13 +1,12 @@
 // src/apiClient.js
 
-// Works with CRA (REACT_APP_*) and Vite (VITE_*)
+// Works with CRA (REACT_APP_*)
 const RAW_BASE =
   process.env.REACT_APP_API_BASE_URL ||
-  process.env.VITE_API_BASE ||
   ""; // if empty, we'll default to /api
 
 function normalizeBase(b) {
-  if (!b || typeof b !== "string") return "/api"; // <-- default so CF behavior /api/* matches
+  if (!b || typeof b !== "string") return "/api"; // default so CF behavior /api/* matches
   // trim spaces and trailing slashes
   let s = b.trim().replace(/\/+$/, "");
   // allow bare "api" -> "/api"
@@ -74,7 +73,7 @@ const ApiClient = {
   getAllAircraft: () => request("/aircraft"),
   getAllPassengers: () => request("/passengers"),
 
-  // If/when you add writes:
+  // If add writes:
   // createPassenger: (payload) => request("/passengers", { method: "POST", body: payload }),
   // updatePassenger: (id, payload) => request(`/passengers/${id}`, { method: "PUT", body: payload }),
   // deletePassenger: (id) => request(`/passengers/${id}`, { method: "DELETE" }),
