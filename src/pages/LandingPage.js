@@ -15,7 +15,7 @@ export default function LandingPage(){
 
                     <h1 className="hero-title">Track, Browse, Manage</h1>
                     <p className="hero-sub">
-                        Explore airports, aircraft, and passengers in a sleek dark interface.
+                        Explore airports, aircraft, and passengers.
                         Admins can add or remove data in seconds.
                     </p>
 

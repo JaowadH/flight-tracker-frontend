@@ -7,7 +7,7 @@ export default function SiteFooter(){
                 <section className="footer-card">
                     <h3 className="footer-title">About</h3>
                     <p className="footer-text">
-                        CCJ Flight Tracker is a simple dashboard for browsing airports, aircraft, and passengers with a clean dark UI.
+                        CCJ Flight Tracker is a simple dashboard for browsing airports, aircraft, and passengers.
                     </p>
                 </section>
 
@@ -21,11 +21,9 @@ export default function SiteFooter(){
                 </section>
 
                 <section className="footer-card">
-                    <h3 className="footer-title">Admin</h3>
-                    <p className="footer-text">Add or remove records. Changes appear instantly in tables.</p>
-                    <div className="footer-actions">
-                        <NavLink to="/admin" className="btn btn-primary">Open Admin</NavLink>
-                    </div>
+                    <h3 className="footer-title">The Coding Crew</h3>
+                    <p className="footer-text">Cody Collins, Colin Yetman, Jaowad Hossain</p>
+
                 </section>
             </div>
         </footer>
